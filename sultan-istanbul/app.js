@@ -33,69 +33,179 @@
     rv.forEach(el => ro.observe(el));
   } else rv.forEach(el => el.classList.add('in'));
 
-  /* ---------- menu data (prices only where Sultan Istanbul has published them) ---------- */
-  const MENU = [
-    { id: 'platters', name: 'Platters', img: 'img/platter.webp', note: 'Made for the whole table', items: [
-      { id: 'special', name: 'Sultan Special Platter', price: 4999, tag: 'Bestseller', desc: 'Fish tikka, qalmi tikka, malai boti, chicken boti, chicken kabab, battair (4 pcs each), Kabuli pulao 900g, naan, 2 roti, BBQ sauce' },
-      { id: 'shawaya', name: 'Shawaya Platter', price: 2499, tag: 'Arabic', desc: 'Whole chicken, boneless chicken, Turkish pilao, shawaya bread, fries, fresh vegetables' },
-      { id: 'fish', name: 'Grill Fish with Pulao', price: 1499, tag: 'Pick of the month', desc: 'Charcoal-grilled fish in special spices with lemon and herbs on aromatic pulao' },
-      { id: 'chaska', name: 'Chaska Platter', desc: 'Hanging chicken skewers, beef kabab, grilled vegetables, Turkish rice and bread' }
+  /* ---------- menu data: Sultan Istanbul's own menu card (posted July 2026) ---------- */
+  // p: one price · v: [label, price] pairs (Full/Half, Chicken/Beef, S/F) · no price: Ask on WhatsApp
+  const TABS = [
+    { id: 'sig', name: 'Platters & Turkish', groups: [
+      { name: 'Signature Platters', img: 'img/chaska.webp', note: 'Made for the whole table', items: [
+        { n: 'Sultan Special Platter', p: 4999, tag: 'Bestseller', d: 'Fish tikka, qalmi tikka, malai boti, chicken boti, chicken kabab, battair (4 pcs each), Kabuli pulao 900g, naan, 2 roti, BBQ sauce' },
+        { n: 'Shawaya Platter', p: 2499, tag: 'Arabic', d: 'Whole chicken, boneless chicken, Turkish pilao, shawaya bread, fries, fresh vegetables' },
+        { n: 'Grill Fish with Pulao', p: 1499, tag: 'Pick of the month', d: 'Charcoal-grilled fish in special spices on aromatic pulao' },
+        { n: 'Chaska Platter', tag: 'New', d: 'Hanging skewers, kebab, rice and bread for a desi craving' }
+      ]},
+      { name: 'Turkish', img: 'img/buddhu.webp', note: 'First time in Haripur', items: [
+        { n: 'Special Mutton Anadana', p: 4999, tag: 'Salt dome', d: 'Mutton sealed in a salt dome, flamed and opened at your table' },
+        { n: 'Buddhu Mutton', p: 4999, tag: 'Smoked', d: 'Mutton chops with rice and five dips, served under smoke' },
+        { n: 'Ouzi Tawook', p: 2999, d: 'Salt-crust skinned chicken' },
+        { n: 'Baklava Kebab', p: 2499 },
+        { n: 'Dajajal Faham', p: 2499, d: 'Skinned grilled chicken' },
+        { n: 'Perde Pilavi', p: 1599, d: 'Turkish rice baked in a pastry crust' }
+      ]},
+      { name: 'Turkish Barbecue', img: 'img/skewers.webp', note: 'Turkish cuts off the grill', items: [
+        { n: 'Andana Kebab', q: '4 pcs', p: 2799 },
+        { n: 'Chullu Kebab', q: '4 pcs', p: 1999 },
+        { n: 'Paneeri Boti', q: '10 pcs', p: 1499 },
+        { n: 'Anari Boti', q: '10 pcs', p: 1299 },
+        { n: 'Sis Tavuk Boti', q: '10 pcs', p: 1299 },
+        { n: 'Kanat Wings', q: '10 pcs', p: 1199 }
+      ]}
     ]},
-    { id: 'turkish', name: 'Turkish & Mutton', img: 'img/anadana.webp', note: 'First time in Haripur', items: [
-      { id: 'anadana', name: 'Mutton Anadana', tag: 'Salt dome', desc: 'Turkish mutton sealed in a salt dome, flamed and opened at your table' },
-      { id: 'bhudu', name: 'Mutton Bhudu', tag: 'Smoked', desc: 'Mutton chops on a board with rice and five dips, served under smoke' },
-      { id: 'ranjha', name: 'Ranjha Gosht', desc: 'Mutton on the bone, slow-cooked and sealed in foil' },
-      { id: 'karahi', name: 'Chicken Karahi', desc: 'Cooked fresh in the karahi with tomatoes, ginger and green chilli' }
+    { id: 'bbq', name: 'BBQ & Kebab', groups: [
+      { name: 'Bar Be Que', img: 'img/grill.webp', note: 'Fresh off the charcoal', items: [
+        { n: 'Fish Tikka', q: '10 pcs', p: 2499 },
+        { n: 'Haryali Boti', q: '10 pcs', p: 1399 },
+        { n: 'Malai Boti', q: '10 pcs', p: 1399 },
+        { n: 'Chatkhara Boti', q: '10 pcs', p: 1199 },
+        { n: 'Achari Boti', q: '10 pcs', p: 1199 },
+        { n: 'Sikandari Tikka', q: '4 pcs', p: 999 },
+        { n: 'Chicken Tikka (Leg)', p: 499 },
+        { n: 'Chicken Tikka (Chest)', p: 499 }
+      ]},
+      { name: 'Kebab House', note: 'Four to a plate', items: [
+        { n: 'Beef Kebab', q: '4 pcs', p: 1499 },
+        { n: 'Reshmi Kebab', q: '4 pcs', p: 1299 },
+        { n: 'Chicken Kebab', q: '4 pcs', p: 1199 }
+      ]}
     ]},
-    { id: 'bbq', name: 'BBQ', img: 'img/grill.webp', note: 'Fresh off the charcoal', items: [
-      { id: 'fishtikka', name: 'Fish Tikka', desc: 'Spiced fish pieces grilled on charcoal' },
-      { id: 'qalmi', name: 'Qalmi Tikka', desc: 'Chicken leg pieces, marinated and grilled' },
-      { id: 'malai', name: 'Malai Boti', desc: 'Creamy, mild chicken boti' },
-      { id: 'boti', name: 'Chicken Boti', desc: 'Classic spicy chicken boti' },
-      { id: 'kabab', name: 'Chicken Kabab', desc: 'Seekh kabab off the grill' },
-      { id: 'beefkabab', name: 'Beef Kabab', desc: 'Beef seekh kabab' },
-      { id: 'battair', name: 'Battair', desc: 'Grilled quail' }
+    { id: 'karahi', name: 'Karahi & Shinwari', groups: [
+      { name: 'Mutton Karahi', note: 'Full or half', items: [
+        { n: "Sultan's Special Karahi", v: [['Full', 4499], ['Half', 2299]], tag: 'Signature' },
+        { n: 'Achari Karahi', v: [['Full', 4199], ['Half', 2299]] },
+        { n: 'Lahori Karahi', v: [['Full', 3999], ['Half', 2199]] },
+        { n: 'Afghani Karahi', v: [['Full', 3999], ['Half', 2199]] }
+      ]},
+      { name: 'Chicken Karahi', note: 'Full or half', items: [
+        { n: "Sultan's Special Karahi", v: [['Full', 2499], ['Half', 1399]], tag: 'Signature' },
+        { n: 'Lahori Karahi', v: [['Full', 2099], ['Half', 1249]] },
+        { n: 'Afghani Karahi', v: [['Full', 2099], ['Half', 1249]] },
+        { n: 'Achari Karahi', v: [['Full', 2099], ['Half', 1249]] }
+      ]},
+      { name: 'Shinwari', img: 'img/ranjha.webp', note: 'Peshawar style', items: [
+        { n: 'Ranjha Gosht', p: 3999, tag: 'Royal' },
+        { n: 'Mutton Nalli Karahi', p: 4499 },
+        { n: 'Sulemani Karahi', v: [['Full', 4499], ['Half', 2299]] },
+        { n: 'Landi Kotal Karahi Mutton', v: [['Full', 3899], ['Half', 2199]] },
+        { n: 'Landi Kotal Karahi Chicken', v: [['Full', 2499], ['Half', 1249]] },
+        { n: 'Mutton Rosh', p: 4099 },
+        { n: 'Mutton DumPukht', p: 4099 },
+        { n: 'Beef Kabuli Pulao', p: 1244 },
+        { n: 'Patta Tikka', p: 1199 }
+      ]}
     ]},
-    { id: 'rice', name: 'Rice & Bread', img: 'img/skewers.webp', note: 'With every meal', items: [
-      { id: 'kabuli', name: 'Kabuli Pulao', desc: 'Afghan-style pulao with raisins and carrots' },
-      { id: 'pilao', name: 'Turkish Pilao', desc: 'Long-grain Turkish rice' },
-      { id: 'biryani', name: 'Chicken Biryani', desc: 'Spiced rice layered with chicken' },
-      { id: 'sbread', name: 'Shawaya Bread', desc: 'Soft Arabic bread' },
-      { id: 'naan', name: 'Naan', desc: 'From the tandoor' },
-      { id: 'roti', name: 'Roti', desc: 'From the tandoor' }
+    { id: 'desi', name: 'Desi Mains', groups: [
+      { name: 'Pakistani / Mughlai', note: 'House curries and handis', items: [
+        { n: 'Sultan Special Rajhastani Cheese Handi', p: 1799, tag: 'Signature' },
+        { n: 'Chicken Bharta', p: 1499 }, { n: 'Surprise Chicken', p: 1499 }, { n: 'Bombay Chicken', p: 1499 },
+        { n: 'Chinioti Jalfrezi', p: 1499 }, { n: 'Lakhnao Curry', p: 1399 }, { n: 'White Handi', p: 1399 },
+        { n: 'Lahori Handi', p: 1299 }, { n: 'Kabab Masala', p: 1249 }, { n: 'Lakshami Tawa Chicken', p: 999 }
+      ]},
+      { name: 'Signature Dishes', note: 'Vegetarian', items: [
+        { n: 'Palak Paneer', p: 799 }, { n: 'Mix Vegetable', p: 699 }, { n: 'Daal Mash', p: 699 }
+      ]}
     ]},
-    { id: 'sweet', name: 'Sweets & Drinks', img: 'img/hall2.webp', note: 'To finish', items: [
-      { id: 'kunafa', name: 'Cheese Kunafa', tag: 'New', desc: 'Warm kunafa with melted cheese and syrup' },
-      { id: 'mint', name: 'Mint Margarita', desc: 'Fresh mint, lemon and ice' },
-      { id: 'drinks', name: 'Cold Drinks', desc: 'Regular and 1.5 litre' }
+    { id: 'rice', name: 'Rice, Chinese & Steaks', groups: [
+      { name: 'Rice', note: 'Pulao, biryani, fried rice', items: [
+        { n: 'Mutton Bhunna Pulao', p: 2499 }, { n: 'Chicken Bhunna Pulao', p: 1899 }, { n: 'Chicken Biryani', p: 1499 },
+        { n: 'Chicken Fried Rice', p: 799 }, { n: 'Egg Fried Rice', p: 499 }
+      ]},
+      { name: 'Chinese', note: 'Served with rice', items: [
+        { n: "Sultan's Special Gravy with Rice", p: 1399 }, { n: 'Beef Chilli Dry with Rice', p: 1699 },
+        { n: 'Chicken Chilli Dry with Rice', p: 1299 }, { n: 'Manchurian with Rice', p: 999 }, { n: 'Chicken Chow Mein', p: 999 }
+      ]},
+      { name: 'Steaks', note: 'Chicken or beef', items: [
+        { n: "Sultan's Special Steak", v: [['Chicken', 1699], ['Beef', 1999]] },
+        { n: 'Mexican Steak', v: [['Chicken', 1549], ['Beef', 1999]] },
+        { n: 'Mushroom Steak', v: [['Chicken', 1499], ['Beef', 1999]] },
+        { n: 'Black Pepper Steak', v: [['Chicken', 1499], ['Beef', 1999]] }
+      ]},
+      { name: 'Pasta', note: 'Creamy and rich', items: [
+        { n: "Sultan's Special Pasta", p: 1699 }, { n: 'Fettuccine Alfredo Pasta', p: 1449 }
+      ]}
+    ]},
+    { id: 'start', name: 'Starters & Soups', groups: [
+      { name: 'Appetizers', note: 'To start the table', items: [
+        { n: 'Finger Fish', p: 1699 }, { n: 'Teriyaki Chicken', p: 1199 }, { n: 'Dynamite Chicken', p: 1199 }, { n: 'Dhaka Chicken', p: 1199 },
+        { n: 'Sultan Special Lahmacun', p: 999, tag: 'Turkish' }, { n: 'Honey Wings', q: '8 pcs', p: 999 }, { n: 'Chicken Pakora', p: 999 },
+        { n: 'Loaded Fries', p: 999 }, { n: 'Cheese Naan', p: 549 }, { n: 'Plain Fries', p: 349 }, { n: 'Fish Cracker', p: 299 }
+      ]},
+      { name: 'Soup', note: 'Turkish çorba and more', items: [
+        { n: 'Yalya Çorbası', p: 399 }, { n: 'Lentil Çorbası', p: 399 },
+        { n: 'Corn Soup', v: [['Single', 299], ['Family', 999]] }, { n: 'Hot & Sour Soup', v: [['Single', 299], ['Family', 999]] }
+      ]},
+      { name: 'Salads & Dips', note: 'Mezze for the table', items: [
+        { n: "Sultan's Special Mezze Platter", p: 2999, tag: 'Mezze' }, { n: 'Greek Salad', p: 849 }, { n: 'Humus', p: 799 },
+        { n: 'Baba Ganoush', p: 599 }, { n: 'Russian Salad', p: 499 }, { n: 'Green Salad', p: 199 }, { n: 'Salata Sauce', p: 199 },
+        { n: 'Barbecue Sauce', p: 149 }, { n: 'Plum Sauce', p: 149 }, { n: 'Mint Raita', p: 149 }, { n: 'Zeera Raita', p: 149 }, { n: 'Plain Yogurt', p: 119 }
+      ]}
+    ]},
+    { id: 'sweet', name: 'Desserts & Drinks', groups: [
+      { name: 'Desserts', img: 'img/tiramisu.webp', note: 'A sweet finish', items: [
+        { n: 'Sultan Special Knafeh', p: 1399, tag: 'Turkish' }, { n: 'Chocolate Knafeh', p: 1249 }, { n: 'Baklawa', p: 999 },
+        { n: 'Basbousa', p: 799 }, { n: 'American Cake Cheese Slice', p: 749 }, { n: 'Three Milk Cake', p: 699 },
+        { n: 'Tiramisu', p: 599 }, { n: 'Chocolate Tree', p: 499 }, { n: 'Pastry', p: 399 }, { n: 'Kheer', p: 249 }, { n: 'Milky Bowl', tag: 'New' }
+      ]},
+      { name: 'Mocktails', note: 'Served with smoke', items: [
+        { n: 'Saudi Champagne' }, { n: 'Blue Colada' }, { n: 'Classic Mojito' }, { n: 'Strawberry Margarita' }, { n: 'Mint Margarita' }, { n: 'Mango Smoothie' }
+      ]},
+      { name: 'Tea', note: 'Chai after dinner', items: [
+        { n: "Sultan's Special Pink Tea", p: 149 }, { n: 'Doodh Patti', p: 119 }, { n: 'Gur Wali Chaye', p: 119 }, { n: 'Karak Chai', p: 99 }, { n: 'Green Tea', p: 59 }
+      ]},
+      { name: 'Tandoor', note: 'Fresh from the tandoor', items: [
+        { n: 'Qandhari Naan', p: 179 }, { n: 'Tandoori Paratha', p: 119 }, { n: 'Roghni Naan', p: 99 }, { n: 'Garlic Naan', p: 99 }, { n: 'Plain Naan', p: 29 }, { n: 'Roti', p: 29 }
+      ]}
     ]}
   ];
-  const ALL = new Map(); MENU.forEach(g => g.items.forEach(i => ALL.set(i.id, i)));
+  const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const ALL = new Map();
+  TABS.forEach(t => t.groups.forEach(g => g.items.forEach(i => {
+    i.id = slug(g.name + ' ' + i.n);
+    if (i.v) i.v.forEach(([l, p]) => ALL.set(i.id + '--' + slug(l), { id: i.id + '--' + slug(l), name: `${i.n} (${l})`, price: p }));
+    else if (i.p) ALL.set(i.id, { id: i.id, name: i.n, price: i.p });
+  })));
+  // short ids used by buttons outside the menu
+  const ALIAS = { special: 'signature-platters-sultan-special-platter', shawaya: 'signature-platters-shawaya-platter', fish: 'signature-platters-grill-fish-with-pulao',
+    anadana: 'turkish-special-mutton-anadana', buddhu: 'turkish-buddhu-mutton', ranjha: 'shinwari-ranjha-gosht',
+    tiramisu: 'desserts-tiramisu', accs: 'desserts-american-cake-cheese-slice', knafeh: 'desserts-sultan-special-knafeh' };
+  const find = k => ALL.get(ALIAS[k] || k);
 
   const tabsEl = $('[data-tabs]'), menuEl = $('[data-menu]'), searchEl = $('[data-search]');
-  let current = 'all';
-  const tabsList = [{ id: 'all', name: 'All' }, ...MENU];
-  tabsEl.innerHTML = tabsList.map(t => `<button type="button" role="tab" aria-selected="${t.id === 'all'}" data-tab="${t.id}">${t.name}</button>`).join('');
+  let current = 'sig';
+  tabsEl.innerHTML = TABS.map(t => `<button type="button" role="tab" aria-selected="${t.id === current}" data-tab="${t.id}">${t.name}</button>`).join('');
+  const askLink = n => `<a class="ask-sm" href="https://wa.me/${WA}?text=${encodeURIComponent('Assalam o Alaikum, what is the price of ' + n + '?')}" target="_blank" rel="noopener">${icon('wa')}Ask</a>`;
+  const addBtn = id => `<button class="add" type="button" data-add="${id}" aria-label="Add">Add ${icon('plus')}</button>`;
   function itemHTML(i) {
-    const right = i.price
-      ? `<div class="mi-act"><span class="mi-price">${fmt(i.price)}</span><button class="add" type="button" data-add="${i.id}">Add ${icon('plus')}</button></div>`
-      : `<a class="ask-sm" href="https://wa.me/${WA}?text=${encodeURIComponent('Assalam o Alaikum, what is the price of ' + i.name + '?')}" target="_blank" rel="noopener">${icon('wa')}Ask</a>`;
-    return `<div class="mi"><div class="mi-txt"><p class="mi-name">${i.name}${i.tag ? `<em>${i.tag}</em>` : ''}</p><p class="mi-desc">${i.desc}</p></div>${right}</div>`;
+    let right;
+    if (i.v) right = `<div class="mi-vars">${i.v.map(([l, p]) => `<div class="mi-var"><span class="vl">${l}</span><span class="mi-price">${fmt(p)}</span>${addBtn(i.id + '--' + slug(l))}</div>`).join('')}</div>`;
+    else if (i.p) right = `<div class="mi-act"><span class="mi-price">${fmt(i.p)}</span>${addBtn(i.id)}</div>`;
+    else right = askLink(i.n);
+    return `<div class="mi"><div class="mi-txt"><p class="mi-name">${i.n}${i.q ? `<span class="qty-l">${i.q}</span>` : ''}${i.tag ? `<em>${i.tag}</em>` : ''}</p>${i.d ? `<p class="mi-desc">${i.d}</p>` : ''}</div>${right}</div>`;
   }
   function renderMenu() {
     const q = (searchEl.value || '').trim().toLowerCase();
-    const groups = MENU.filter(g => current === 'all' || g.id === current).map(g => ({ ...g, items: g.items.filter(i => !q || (i.name + ' ' + i.desc).toLowerCase().includes(q)) })).filter(g => g.items.length);
+    const tabs = q ? TABS : TABS.filter(t => t.id === current);
+    const groups = tabs.flatMap(t => t.groups).map(g => ({ ...g, items: g.items.filter(i => !q || (g.name + ' ' + i.n + ' ' + (i.d || '')).toLowerCase().includes(q)) })).filter(g => g.items.length);
     menuEl.innerHTML = groups.length ? groups.map(g => `
       <div class="menu-group">
-        <div class="mg-cover"><img src="${g.img}" alt="" loading="lazy"><div><small>${g.items.length} dishes</small><h3>${g.name}</h3><p>${g.note}</p></div></div>
+        <div class="mg-cover${g.img ? '' : ' plain'}">${g.img ? `<img src="${g.img}" alt="" loading="lazy">` : `<svg class="mg-orn" aria-hidden="true"><use href="#i-orn"/></svg>`}<div><small>${g.items.length} dishes</small><h3>${g.name}</h3><p>${g.note}</p></div></div>
         <div class="mg-items">${g.items.map(itemHTML).join('')}</div>
       </div>`).join('') : `<p class="empty">Nothing found. Ask us on <a href="https://wa.me/${WA}" target="_blank" rel="noopener">WhatsApp</a>.</p>`;
   }
   tabsEl.addEventListener('click', e => {
     const b = e.target.closest('[data-tab]'); if (!b) return;
-    current = b.dataset.tab; $$('[data-tab]', tabsEl).forEach(x => x.setAttribute('aria-selected', x === b)); renderMenu();
+    current = b.dataset.tab; searchEl.value = '';
+    $$('[data-tab]', tabsEl).forEach(x => x.setAttribute('aria-selected', x === b)); renderMenu();
   });
-  searchEl.addEventListener('input', renderMenu);
+  searchEl.addEventListener('input', () => { $$('[data-tab]', tabsEl).forEach(x => x.setAttribute('aria-selected', !searchEl.value && x.dataset.tab === current)); renderMenu(); });
   renderMenu();
 
   /* ---------- cart ---------- */
@@ -126,9 +236,9 @@
   }
   document.addEventListener('click', e => {
     const card = e.target.closest('[data-item] .add');
-    if (card) { change(JSON.parse(card.closest('[data-item]').dataset.item), 1); return; }
+    if (card) { const it = JSON.parse(card.closest('[data-item]').dataset.item); const m = find(it.id); change(m || it, 1); return; }
     const a = e.target.closest('[data-add]');
-    if (a) { const i = ALL.get(a.dataset.add); if (i && i.price) change(i, 1); return; }
+    if (a) { const i = find(a.dataset.add); if (i) change(i, 1); return; }
     const inc = e.target.closest('[data-inc]'); if (inc) { const l = cart.get(inc.dataset.inc); change({ id: inc.dataset.inc, ...l }, 1); return; }
     const dec = e.target.closest('[data-dec]'); if (dec) { const l = cart.get(dec.dataset.dec); change({ id: dec.dataset.dec, ...l }, -1); return; }
     if (e.target.closest('[data-open-cart]')) { openSheet(); return; }
