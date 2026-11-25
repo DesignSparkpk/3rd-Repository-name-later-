@@ -202,6 +202,8 @@ header.site.solid { background: rgba(42, 10, 12, .92); backdrop-filter: blur(10p
 .palace { display: grid; grid-template-columns: 1fr 1.05fr; gap: 60px; align-items: center; }
 .palace-copy { display: grid; gap: 18px; }
 .palace-copy p { font-size: 17px; color: #fff1dc; }
+.host { font: italic 600 22px/1.3 var(--accent); color: var(--gold-2) !important; }
+.host b { font-style: normal; font-family: var(--display); font-size: 19px; letter-spacing: .03em; }
 .perks { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .perks li { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 14px; background: rgba(42,10,12,.25); border: 1px solid rgba(255,230,190,.25); font-weight: 700; font-size: 14px; }
 .perks .ic { color: var(--gold-2); }
