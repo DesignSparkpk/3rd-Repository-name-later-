@@ -165,6 +165,11 @@
       ]}
     ]}
   ];
+  const PHOTO = { 'Sultan Special Platter': 'platter', 'Shawaya Platter': 'shawaya-studio', 'Grill Fish with Pulao': 'fish', 'Chaska Platter': 'chaska',
+    'Special Mutton Anadana': 'anadana', 'Buddhu Mutton': 'buddhu', 'Ranjha Gosht': 'd-ranjha-g', 'Fish Tikka': 'grill',
+    'Chicken Chilli Dry with Rice': 'd-chilli-dry', 'Manchurian with Rice': 'd-manchurian', 'Chicken Chow Mein': 'd-chowmein',
+    'Tiramisu': 'tiramisu', 'American Cake Cheese Slice': 'cheesecake', 'Milky Bowl': 'milky',
+    'Saudi Champagne': 'd-saudi', 'Blue Colada': 'd-colada', 'Classic Mojito': 'd-mojito', 'Strawberry Margarita': 'd-strawberry', 'Mango Smoothie': 'd-mango' };
   const slug = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const ALL = new Map();
   TABS.forEach(t => t.groups.forEach(g => g.items.forEach(i => {
@@ -182,18 +187,21 @@
   let current = 'sig';
   tabsEl.innerHTML = TABS.map(t => `<button type="button" role="tab" aria-selected="${t.id === current}" data-tab="${t.id}">${t.name}</button>`).join('');
   const askLink = n => `<a class="ask-sm" href="https://wa.me/${WA}?text=${encodeURIComponent('Assalam o Alaikum, what is the price of ' + n + '?')}" target="_blank" rel="noopener">${icon('wa')}Ask</a>`;
-  const addBtn = id => `<button class="add" type="button" data-add="${id}" aria-label="Add">Add ${icon('plus')}</button>`;
+  const addBtn = id => `<span class="stp" data-k="${id}"></span>`;
   function itemHTML(i) {
     let right;
     if (i.v) right = `<div class="mi-vars">${i.v.map(([l, p]) => `<div class="mi-var"><span class="vl">${l}</span><span class="mi-price">${fmt(p)}</span>${addBtn(i.id + '--' + slug(l))}</div>`).join('')}</div>`;
     else if (i.p) right = `<div class="mi-act"><span class="mi-price">${fmt(i.p)}</span>${addBtn(i.id)}</div>`;
     else right = askLink(i.n);
-    return `<div class="mi"><div class="mi-txt"><p class="mi-name">${i.n}${i.q ? `<span class="qty-l">${i.q}</span>` : ''}${i.tag ? `<em>${i.tag}</em>` : ''}</p>${i.d ? `<p class="mi-desc">${i.d}</p>` : ''}</div>${right}</div>`;
+    const ph = PHOTO[i.n] ? `<img class="mi-thumb" src="img/${PHOTO[i.n]}.webp" alt="" loading="lazy">` : '';
+    const tap = i.p ? ` data-tap="${i.id}"` : (i.v ? ` data-tap="${i.id}--${slug(i.v[0][0])}"` : '');
+    return `<div class="mi${tap ? ' tappable' : ''}"${tap}>${ph}<div class="mi-txt"><p class="mi-name">${i.n}${i.q ? `<span class="qty-l">${i.q}</span>` : ''}${i.tag ? `<em>${i.tag}</em>` : ''}</p>${i.d ? `<p class="mi-desc">${i.d}</p>` : ''}</div>${right}</div>`;
   }
   function renderMenu() {
     const q = (searchEl.value || '').trim().toLowerCase();
     const tabs = q ? TABS : TABS.filter(t => t.id === current);
     const groups = tabs.flatMap(t => t.groups).map(g => ({ ...g, items: g.items.filter(i => !q || (g.name + ' ' + i.n + ' ' + (i.d || '')).toLowerCase().includes(q)) })).filter(g => g.items.length);
+    setTimeout(() => window.__paint && window.__paint(), 0);
     menuEl.innerHTML = groups.length ? groups.map(g => `
       <div class="menu-group">
         <div class="mg-cover${g.img ? '' : ' plain'}">${g.img ? `<img src="${g.img}" alt="" loading="lazy">` : `<svg class="mg-orn" aria-hidden="true"><use href="#i-orn"/></svg>`}<div><small>${g.items.length} dishes</small><h3>${g.name}</h3><p>${g.note}</p></div></div>
@@ -226,21 +234,35 @@
     if (d > 0) { say(`${info.name} added`); $$('[data-count]').forEach(c => { c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }); }
   }
   const linesEl = $('[data-lines]'), totalEl = $('[data-total]');
+  const keyOf = k => (find(k) || {}).id || k;
+  function paint() {
+    $$('.stp').forEach(el => {
+      const id = keyOf(el.dataset.k), q = (cart.get(id) || {}).qty || 0;
+      const want = q ? 'q' + q : 'add';
+      if (el.dataset.st === want) return; el.dataset.st = want;
+      el.innerHTML = q
+        ? `<span class="step"><button type="button" data-dec="${id}" aria-label="One less">${icon('minus')}</button><b>${q}</b><button type="button" data-inc="${id}" aria-label="One more">${icon('plus')}</button></span>`
+        : `<button class="add" type="button" data-add="${el.dataset.k}">${el.dataset.label || 'Add'} ${icon('plus')}</button>`;
+    });
+  }
+  window.__paint = paint;
   function render() {
+    paint();
     $$('[data-count]').forEach(c => c.textContent = count());
     totalEl.textContent = fmt(total());
     linesEl.innerHTML = cart.size ? [...cart].map(([id, l]) => `
-      <div class="line"><b>${l.name}<small>${fmt(l.price)} each</small></b>
+      <div class="line"><b>${l.name}<small>${fmt(l.price)} × ${l.qty} = <strong>${fmt(l.price * l.qty)}</strong></small></b>
       <div class="qty"><button type="button" data-dec="${id}" aria-label="One less ${l.name}">${icon('minus')}</button><span>${l.qty}</span><button type="button" data-inc="${id}" aria-label="One more ${l.name}">${icon('plus')}</button></div></div>`).join('')
       : `<div class="sheet-empty"><img src="img/logo-badge.png" alt="" width="84" height="84" style="border-radius:50%"><p>Your order is empty.<br>Add a platter to get started.</p><a class="btn gold sm" href="#signature" data-close-cart>See the platters</a></div>`;
   }
+  const lineOf = id => cart.get(id) ? { id, ...cart.get(id) } : find(id);
   document.addEventListener('click', e => {
-    const card = e.target.closest('[data-item] .add');
-    if (card) { const it = JSON.parse(card.closest('[data-item]').dataset.item); const m = find(it.id); change(m || it, 1); return; }
     const a = e.target.closest('[data-add]');
     if (a) { const i = find(a.dataset.add); if (i) change(i, 1); return; }
-    const inc = e.target.closest('[data-inc]'); if (inc) { const l = cart.get(inc.dataset.inc); change({ id: inc.dataset.inc, ...l }, 1); return; }
-    const dec = e.target.closest('[data-dec]'); if (dec) { const l = cart.get(dec.dataset.dec); change({ id: dec.dataset.dec, ...l }, -1); return; }
+    const inc = e.target.closest('[data-inc]'); if (inc) { const l = lineOf(inc.dataset.inc); if (l) change(l, 1); return; }
+    const dec = e.target.closest('[data-dec]'); if (dec) { const l = lineOf(dec.dataset.dec); if (l) change(l, -1); return; }
+    const tap = e.target.closest('[data-tap]');
+    if (tap && !e.target.closest('a, button, input, select, textarea, .stp')) { const i = find(tap.dataset.tap); if (i) change(i, 1); return; }
     if (e.target.closest('[data-open-cart]')) { openSheet(); return; }
     if (e.target.closest('[data-close-cart]') || e.target.matches('[data-sheet-back]')) closeSheet();
   });
@@ -250,13 +272,25 @@
   function closeSheet() { sheet.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true'); back.hidden = true; document.body.style.overflow = ''; }
   addEventListener('keydown', e => { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); });
 
-  const modeEl = $('[data-mode]'), addrWrap = $('[data-addr-wrap]'), addrEl = $('[data-addr]');
+  const F = n => $(`[data-o="${n}"]`);
+  const modeEl = F('mode'), addrWrap = $('[data-addr-wrap]'), oErr = $('[data-oerr]');
   modeEl.addEventListener('change', () => { addrWrap.hidden = modeEl.value !== 'Home delivery'; });
+  try { const saved = JSON.parse(localStorage.getItem('sultan-me') || '{}'); ['name', 'phone', 'addr'].forEach(k => { if (saved[k]) F(k).value = saved[k]; }); } catch (e) {}
   $('[data-send]').addEventListener('click', () => {
     if (!cart.size) { say('Add a dish first'); return; }
+    const name = F('name').value.trim(), phone = F('phone').value.replace(/[^0-9+]/g, ''), addr = F('addr').value.trim(), mode = modeEl.value;
+    let bad = null;
+    if (!name) bad = ['name', 'Please write your name.'];
+    else if (phone.replace(/\D/g, '').length < 10) bad = ['phone', 'Please write a valid mobile number, e.g. 0300 1234567.'];
+    else if (mode === 'Home delivery' && addr.length < 5) bad = ['addr', 'Please write your delivery address.'];
+    if (bad) { oErr.textContent = bad[1]; oErr.hidden = false; F(bad[0]).focus(); return; }
+    oErr.hidden = true;
+    try { localStorage.setItem('sultan-me', JSON.stringify({ name, phone, addr })); } catch (e) {}
     const lines = [...cart.values()].map(l => `• ${l.qty} × ${l.name} = ${fmt(l.qty * l.price)}`);
-    let msg = `Assalam o Alaikum Sultan Istanbul! I'd like to order:\n\n${lines.join('\n')}\n\nTotal: ${fmt(total())}\n${modeEl.value}`;
-    if (modeEl.value === 'Home delivery' && addrEl.value.trim()) msg += `\nAddress: ${addrEl.value.trim()}`;
+    let msg = `Assalam o Alaikum Sultan Istanbul! New order:\n\n${lines.join('\n')}\n\n*Total: ${fmt(total())}*\n\nName: ${name}\nMobile: ${phone}\nOrder type: ${mode}`;
+    if (mode === 'Home delivery') msg += `\nAddress: ${addr}`;
+    msg += `\nPayment: ${F('pay').value}`;
+    if (F('note').value.trim()) msg += `\nNote: ${F('note').value.trim()}`;
     open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
   });
   render();

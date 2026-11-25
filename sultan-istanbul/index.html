@@ -8,7 +8,9 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Sultan Istanbul · Haripur">
 <meta property="og:description" content="Turkish platters, Mutton Anadana under a salt dome and a royal Ottoman hall on GT Road, Haripur.">
-<meta property="og:image" content="share.jpg">
+<meta property="og:image" content="https://sultan-haripur.pages.dev/share.jpg">
+<meta property="og:url" content="https://sultan-haripur.pages.dev/">
+<link rel="canonical" href="https://sultan-haripur.pages.dev/">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Sultan Istanbul">
@@ -120,7 +122,7 @@
         <p class="lead">Made for sharing with family and friends. Tap <b>Add</b> and send your order straight to our WhatsApp.</p>
       </div>
       <div class="sig-grid">
-        <article class="dish big reveal" data-item='{"id":"special","name":"Sultan Special Platter","price":4999}'>
+        <article class="dish tappable big reveal" data-tap="special">
           <img src="img/grill.webp" alt="Fish grilling over glowing charcoal" loading="lazy" width="720" height="900">
           <div class="tag red">Bestseller · Save Rs 2,600</div>
           <ul class="chips">
@@ -129,25 +131,25 @@
           <div class="dish-body">
             <h3>Sultan Special Platter</h3>
             <p>Six kinds of BBQ off the charcoal with Kabuli pulao, naan, roti and our BBQ sauce. Feeds the family.</p>
-            <div class="row"><p class="price">Rs 4,999 <s>7,599</s></p><button class="add" type="button">Add <svg class="ic"><use href="#i-plus"/></svg></button></div>
+            <div class="row"><p class="price">Rs 4,999 <s>7,599</s></p><span class="stp" data-k="special"></span></div>
           </div>
         </article>
-        <article class="dish reveal" data-item='{"id":"shawaya","name":"Shawaya Platter","price":2499}'>
+        <article class="dish tappable reveal" data-tap="shawaya">
           <img src="img/shawaya-studio.webp" alt="Shawaya Platter: whole roast chicken on rice with bread, fries and peppers" loading="lazy" width="677" height="957">
           <div class="tag gold">Middle-East taste</div>
           <div class="dish-body">
             <h3>Shawaya Platter</h3>
             <p>Whole chicken, boneless chicken, Turkish pilao, shawaya bread, fries and fresh vegetables.</p>
-            <div class="row"><p class="price">Rs 2,499</p><button class="add" type="button">Add <svg class="ic"><use href="#i-plus"/></svg></button></div>
+            <div class="row"><p class="price">Rs 2,499</p><span class="stp" data-k="shawaya"></span></div>
           </div>
         </article>
-        <article class="dish reveal" data-item='{"id":"fish","name":"Grill Fish with Pulao","price":1499}'>
+        <article class="dish tappable reveal" data-tap="fish">
           <img src="img/fish.webp" alt="Grilled fish with onion rings and lime on pulao" loading="lazy" width="720" height="900">
           <div class="tag gold">Pick of the month</div>
           <div class="dish-body">
             <h3>Grill Fish with Pulao</h3>
             <p>Marinated in our special spices, grilled on charcoal, served on aromatic pulao.</p>
-            <div class="row"><p class="price">Rs 1,499</p><button class="add" type="button">Add <svg class="ic"><use href="#i-plus"/></svg></button></div>
+            <div class="row"><p class="price">Rs 1,499</p><span class="stp" data-k="fish"></span></div>
           </div>
         </article>
         <article class="dish reveal">
@@ -175,22 +177,22 @@
         <article class="film-card reveal">
           <video muted loop playsinline preload="none" poster="video/anadana.jpg" data-src="video/anadana.mp4" aria-hidden="true"></video>
           <div class="film-copy"><span class="tag gold">Salt dome</span><h3>Mutton Anadana</h3><p>Turkish mutton sealed in a salt dome, set alight and broken open at your table.</p>
-          <button class="ask" type="button" data-add="anadana"><svg class="ic"><use href="#i-plus"/></svg>Add · Rs 4,999</button></div>
+          <span class="stp on-film" data-k="anadana" data-label="Add · Rs 4,999"></span></div>
         </article>
         <article class="film-card reveal">
           <video muted loop playsinline preload="none" poster="video/bhudu.jpg" data-src="video/bhudu.mp4" aria-hidden="true"></video>
           <div class="film-copy"><span class="tag gold">Under smoke</span><h3>Buddhu Mutton</h3><p>Mutton chops on a board with rice and five dips, served under a cloud of smoke.</p>
-          <button class="ask" type="button" data-add="buddhu"><svg class="ic"><use href="#i-plus"/></svg>Add · Rs 4,999</button></div>
+          <span class="stp on-film" data-k="buddhu" data-label="Add · Rs 4,999"></span></div>
         </article>
         <article class="film-card reveal">
           <video muted loop playsinline preload="none" poster="video/ranjha.jpg" data-src="video/ranjha.mp4" aria-hidden="true"></video>
           <div class="film-copy"><span class="tag gold">Royal vibe</span><h3>Ranjha Gosht</h3><p>Mutton on the bone, slow-cooked and sealed in foil, opened hot at the table.</p>
-          <button class="ask" type="button" data-add="ranjha"><svg class="ic"><use href="#i-plus"/></svg>Add · Rs 3,999</button></div>
+          <span class="stp on-film" data-k="ranjha" data-label="Add · Rs 3,999"></span></div>
         </article>
         <article class="film-card reveal">
           <video muted loop playsinline preload="none" poster="video/shawaya.jpg" data-src="video/shawaya.mp4" aria-hidden="true"></video>
           <div class="film-copy"><span class="tag gold">Arabic</span><h3>Shawaya, the full show</h3><p>The whole-chicken platter arrives smoking on a wooden board for the family.</p>
-          <button class="ask add-shawaya" type="button" data-add="shawaya"><svg class="ic"><use href="#i-plus"/></svg>Add · Rs 2,499</button></div>
+          <span class="stp on-film" data-k="shawaya" data-label="Add · Rs 2,499"></span></div>
         </article>
       </div>
     </div>
@@ -221,10 +223,10 @@
         <p class="lead">Kunafeh, baklawa, basbousa and three-milk cake. Here are three our guests order most.</p>
       </div>
       <div class="sweets">
-        <article class="sweet reveal"><div class="sw-img"><img src="img/tiramisu.webp" alt="Tiramisu with a cocoa spoon and fork stencil on the plate" loading="lazy" width="775" height="689"></div>
-          <div class="sw-body"><h3>Tiramisu</h3><div class="row"><p class="price">Rs 599</p><button class="add" type="button" data-add="tiramisu">Add <svg class="ic"><use href="#i-plus"/></svg></button></div></div></article>
-        <article class="sweet reveal"><div class="sw-img"><img src="img/cheesecake.webp" alt="A slice of American cheesecake with cherries and cream" loading="lazy" width="947" height="640"></div>
-          <div class="sw-body"><h3>American Cake Cheese Slice</h3><div class="row"><p class="price">Rs 749</p><button class="add" type="button" data-add="accs">Add <svg class="ic"><use href="#i-plus"/></svg></button></div></div></article>
+        <article class="sweet reveal tappable" data-tap="tiramisu"><div class="sw-img"><img src="img/tiramisu.webp" alt="Tiramisu with a cocoa spoon and fork stencil on the plate" loading="lazy" width="775" height="689"></div>
+          <div class="sw-body"><h3>Tiramisu</h3><div class="row"><p class="price">Rs 599</p><span class="stp" data-k="tiramisu"></span></div></div></article>
+        <article class="sweet reveal tappable" data-tap="accs"><div class="sw-img"><img src="img/cheesecake.webp" alt="A slice of American cheesecake with cherries and cream" loading="lazy" width="947" height="640"></div>
+          <div class="sw-body"><h3>American Cake Cheese Slice</h3><div class="row"><p class="price">Rs 749</p><span class="stp" data-k="accs"></span></div></div></article>
         <article class="sweet reveal"><div class="sw-img"><img src="img/milky.webp" alt="Milky Bowl dessert with crumbs and a cherry in a glass bowl" loading="lazy" width="640" height="676"></div>
           <div class="sw-body"><h3>Milky Bowl</h3><div class="row"><p class="price small-p">New</p><a class="add wa-add" href="https://wa.me/923005610774?text=Assalam%20o%20Alaikum%2C%20what%20is%20the%20price%20of%20the%20Milky%20Bowl%3F" target="_blank" rel="noopener"><svg class="ic"><use href="#i-wa"/></svg>Ask</a></div></div></article>
       </div>
@@ -389,13 +391,22 @@
 <div class="sheet-back" data-sheet-back hidden></div>
 <aside class="sheet" data-sheet aria-label="Your order" aria-hidden="true">
   <div class="sheet-head"><h3>Your order</h3><button type="button" class="x" data-close-cart aria-label="Close"><svg class="ic"><use href="#i-x"/></svg></button></div>
-  <div class="sheet-body" data-lines></div>
+  <div class="sheet-body">
+    <div data-lines></div>
+    <div class="o-form">
+      <p class="o-h">Your details</p>
+      <div class="two"><label>Name<input data-o="name" autocomplete="name" placeholder="e.g. Ahmed Khan"></label>
+      <label>Mobile number<input data-o="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="03XX XXXXXXX"></label></div>
+      <label>Order type<select data-o="mode"><option>Home delivery</option><option>Takeaway</option><option>Dine in</option></select></label>
+      <label data-addr-wrap>Delivery address<input data-o="addr" autocomplete="street-address" placeholder="House, street, area in Haripur"></label>
+      <label>Payment<select data-o="pay"><option>Cash on delivery</option><option>JazzCash / Easypaisa</option><option>Pay at the restaurant</option></select></label>
+      <label>Note <span class="opt">(optional)</span><input data-o="note" placeholder="Less spicy, extra raita…"></label>
+    </div>
+  </div>
   <div class="sheet-foot">
-    <label>Dine in, takeaway or delivery?<select data-mode><option>Home delivery</option><option>Takeaway</option><option>Dine in</option></select></label>
-    <label data-addr-wrap>Delivery address<input data-addr placeholder="House, street, area in Haripur"></label>
-    <div class="total"><span>Total</span><b data-total>Rs 0</b></div>
+    <p class="err" data-oerr hidden></p>
+    <div class="total"><span>Total<small class="muted">Delivery charges confirmed on WhatsApp</small></span><b data-total>Rs 0</b></div>
     <button class="btn wa full" type="button" data-send><svg class="ic"><use href="#i-wa"/></svg>Send order on WhatsApp</button>
-    <p class="muted small">Prices from Sultan Istanbul's own posts. We confirm the total on WhatsApp.</p>
   </div>
 </aside>
 <div class="toast" data-toast role="status" aria-live="polite"></div>
