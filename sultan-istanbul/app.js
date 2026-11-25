@@ -197,6 +197,13 @@
     const tap = i.p ? ` data-tap="${i.id}"` : (i.v ? ` data-tap="${i.id}--${slug(i.v[0][0])}"` : '');
     return `<div class="mi${tap ? ' tappable' : ''}"${tap}>${ph}<div class="mi-txt"><p class="mi-name">${i.n}${i.q ? `<span class="qty-l">${i.q}</span>` : ''}${i.tag ? `<em>${i.tag}</em>` : ''}</p>${i.d ? `<p class="mi-desc">${i.d}</p>` : ''}</div>${right}</div>`;
   }
+  /* iPhone Safari only turns a tap on a plain card into a click when the card has its own click
+     listener; the real work happens in the document listener below, this just makes the tap count. */
+  const tapReady = () => $$('[data-tap]').forEach(el => {
+    if (!el.dataset.tapReady) { el.addEventListener('click', () => {}); el.dataset.tapReady = '1'; }
+  });
+  /* Open WhatsApp; if a browser blocks the new window (some in-app browsers), go there in this tab */
+  const openWA = url => { const w = window.open(url, '_blank'); if (w) { try { w.opener = null; } catch (e) {} } else { location.href = url; } };
   function renderMenu() {
     const q = (searchEl.value || '').trim().toLowerCase();
     const tabs = q ? TABS : TABS.filter(t => t.id === current);
@@ -207,6 +214,7 @@
         <div class="mg-cover${g.img ? '' : ' plain'}">${g.img ? `<img src="${g.img}" alt="" loading="lazy">` : `<svg class="mg-orn" aria-hidden="true"><use href="#i-orn"/></svg>`}<div><small>${g.items.length} dishes</small><h3>${g.name}</h3><p>${g.note}</p></div></div>
         <div class="mg-items">${g.items.map(itemHTML).join('')}</div>
       </div>`).join('') : `<p class="empty">Nothing found. Ask us on <a href="https://wa.me/${WA}" target="_blank" rel="noopener">WhatsApp</a>.</p>`;
+    tapReady();
   }
   tabsEl.addEventListener('click', e => {
     const b = e.target.closest('[data-tab]'); if (!b) return;
@@ -291,7 +299,7 @@
     if (mode === 'Home delivery') msg += `\nAddress: ${addr}`;
     msg += `\nPayment: ${F('pay').value}`;
     if (F('note').value.trim()) msg += `\nNote: ${F('note').value.trim()}`;
-    open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    openWA(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`);
   });
   render();
 
@@ -306,6 +314,6 @@
     const day = new Date(f.date.value + 'T12:00').toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
     let msg = `Assalam o Alaikum! Table booking at Sultan Istanbul:\n\nName: ${f.name.value.trim()}\nDate: ${day}\nTime: ${f.time.value}\nGuests: ${f.guests.value}\nSeating: ${f.seat.value}`;
     if (f.note.value.trim()) msg += `\nNote: ${f.note.value.trim()}`;
-    open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    openWA(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`);
   });
 })();
