@@ -73,7 +73,8 @@
   <section class="hero" aria-labelledby="hero-h">
     <div class="hero-films" aria-hidden="true">
       <video class="film film-l" muted loop playsinline preload="none" poster="video/hero-left.jpg" data-src="video/hero-left.mp4"></video>
-      <video class="film film-c" muted loop playsinline autoplay preload="auto" poster="video/hero-center.jpg" src="video/hero-center.mp4"></video>
+      <video class="film film-c" muted loop playsinline autoplay preload="auto" data-src="video/hero-center.mp4" data-poster="video/hero-center.jpg" data-src-m="video/hero-mobile.mp4" data-poster-m="video/hero-mobile.jpg"></video>
+      <script>(function(){var v=document.querySelector('.film-c'),m=matchMedia('(max-width: 960px)').matches;v.poster=m?v.dataset.posterM:v.dataset.poster;v.src=m?v.dataset.srcM:v.dataset.src;})()</script>
       <video class="film film-r" muted loop playsinline preload="none" poster="video/hero-right.jpg" data-src="video/hero-right.mp4"></video>
     </div>
     <div class="hero-shade" aria-hidden="true"></div>

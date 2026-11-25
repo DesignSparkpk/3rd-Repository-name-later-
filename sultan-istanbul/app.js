@@ -13,7 +13,7 @@
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   /* ---------- hero films: side panels on wide screens only ---------- */
-  if (wide && !reduce) $$('.hero video[data-src]').forEach(v => { v.src = v.dataset.src; v.play().catch(() => {}); });
+  if (wide && !reduce) $$('.hero video[data-src]:not(.film-c)').forEach(v => { v.src = v.dataset.src; v.play().catch(() => {}); });
   if (reduce) $$('.hero video').forEach(v => { v.removeAttribute('autoplay'); v.pause(); });
 
   /* ---------- dish films: play only while on screen ---------- */
